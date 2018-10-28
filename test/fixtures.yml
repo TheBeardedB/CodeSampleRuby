@@ -26,6 +26,14 @@ authorize_net:
   login: 7Tt72zseSzH
   password: 7gTh55rdy92ZkP4z
 
+# Working credentials, no need to replace
+# Site login info:
+# login: SampleLogin-api
+# password: 3g6xbLPSdPBWaSY
+awesomesauce:
+  login: SampleLogin-api
+  password: 80300a3a5fa60424daa983936ae94fa5b449dc8a1267ecc2d6b17974676cdfadeb5bd5d8339819f3
+
 axcessms:
   channel: channel
   sender: sender
