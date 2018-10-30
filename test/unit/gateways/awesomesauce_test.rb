@@ -7,8 +7,8 @@ class AwesomesauceTest < Test::Unit::TestCase
 
     Base.mode = :test
 
-    @gateway = AwesomesauceGateway.new(:merchant_id => 'TheBeardedB-api',
-      :secret_key => '1734c886350e7bcba84b6bc57e591e035d55f0ba2d2a1b86804eddb386c81239a1290b569b7229b6')
+    @gateway = AwesomesauceGateway.new(:password => '1734c886350e7bcba84b6bc57e591e035d55f0ba2d2a1b86804eddb386c81239a1290b569b7229b6',
+                                       :login => 'TheBeardedB-api')
 
     @credit_card = credit_card
     @amount = 1.00  # $1 and 0 cents

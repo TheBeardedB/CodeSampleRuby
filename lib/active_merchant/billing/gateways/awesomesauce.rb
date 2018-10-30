@@ -27,7 +27,7 @@ module ActiveMerchant #:nodoc:
       }
 
       def initialize(options={})
-        requires!(options, [:merchant_id, :secret_key])
+        requires!(options, :login, :password)
         super
       end
 
@@ -106,8 +106,8 @@ module ActiveMerchant #:nodoc:
       end
 
       def add_login(xml, options)
-        xml.merchant(options[:merchant_id])
-        xml.secret(options[:secret_key])
+        xml.merchant(options[:login])
+        xml.secret(options[:password])
       end
 
       def headers
