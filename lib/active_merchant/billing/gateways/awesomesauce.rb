@@ -86,6 +86,8 @@ module ActiveMerchant #:nodoc:
         unless valid_payment(payment).nil?
           raise ArgumentError.new payment[:validate]
         end
+
+        options[:url] = url + 'api//auth'
         xml.request do
           add_login(xml,options)
           xml.action(transaction_type)
@@ -95,19 +97,24 @@ module ActiveMerchant #:nodoc:
           xml.cv2(payment[:verification_value])
           xml.exp(payment[:expiry_date])
         end
+
+        xml.target!
       end
 
       def add_captureCancel(xml, transaction_type, ref, options)
+        options[:url] = url + 'api//ref'
         xml.request do
           add_login(xml, options)
           xml.action(transaction_type)
           xml.ref(ref)
         end
+
+        xml.target!
       end
 
       def add_login(xml, options)
-        xml.merchant(options[:login])
-        xml.secret(options[:password])
+        xml.merchant(options[:login].to_s)
+        xml.secret(options[:password].to_s)
       end
 
       def headers
@@ -132,7 +139,7 @@ module ActiveMerchant #:nodoc:
 
         response = {action: action}
 
-        response[:response_code] = !!element.content if (element = doc.at_xpath('//response/success'))
+        response[:response_code] = !element.content if (element = doc.at_xpath('//response/success'))
         response[:response_reason_code] = element.content if (element = doc.at_xpath('//response/code'))
         response[:response_reason_text] = element.content.to_i if(element = doc.at_xpath('//response/err'))
         response[:authorization_code] = element.content if(element = doc.at_xpath('//response/id'))
@@ -140,8 +147,21 @@ module ActiveMerchant #:nodoc:
         response
       end
 
+      def post_data(action)
+        Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
+          xml.send(root_for(action), 'xmlns' => 'AnetApi/xml/v1/schema/AnetApiSchema.xsd') do
+            add_authentication(xml)
+            yield(xml)
+          end
+        end.to_xml(indent: 0)
+      end
+
       def commit(action, options = {}, &payload)
-        raw_response = ssl_post(url, post_data(action, &payload), headers)
+        # Debugging print statements
+        print 'URL: ' + options[:url].to_s
+        print 'Payload: ' + payload
+        # End Debug Statements
+        raw_response = ssl_post(options[:url].to_s, post_data(action, &payload))
         response = parse(action, raw_response)
 
 

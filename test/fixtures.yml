@@ -28,8 +28,8 @@ authorize_net:
 
 # Working credentials, no need to replace
 awesomesauce:
-  some_credential: SOMECREDENTIAL
-  another_credential: ANOTHERCREDENTIAL
+  login: TheBeardedB-api
+  password: 1734c886350e7bcba84b6bc57e591e035d55f0ba2d2a1b86804eddb386c81239a1290b569b7229b6
 
 axcessms:
   channel: channel
